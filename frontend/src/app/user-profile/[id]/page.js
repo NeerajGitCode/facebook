@@ -4,7 +4,6 @@ import ProfileHeader from "../ProfileHeader";
 import ProfileTabs from "../ProfileTabs";
 import { useParams } from "next/navigation";
 import { fetchUserProfile } from "@/service/user.service";
-import LeftSideBar from "@/app/components/LeftSideBar";
 
 const Page = () => {
   const params = useParams();
@@ -38,7 +37,6 @@ const Page = () => {
 
   return (
     <div>
-      <LeftSideBar />
       <ProfileHeader
         profileData={profileData}
         setProfileData={setProfileData}

@@ -1,7 +1,7 @@
 const { uploadFileToCloudinary } = require("../config/cloudinary");
 const User = require("../model/User");
 const Bio = require("../model/UserBio");
-const response = require("../utils/responseHandler");
+const response = require("../utils/responceHandler");
 
 const createOrUpdateUserBio = async (req, res) => {
   try {
@@ -85,6 +85,7 @@ const updateCoverPhoto = async (req, res) => {
     return response(res, 200, "Cover photo update successfully", updateUser);
   } catch (error) {
     console.log(error);
+    console.error(error);
     return response(res, 500, "Internal server error", error.message);
   }
 };
@@ -123,6 +124,7 @@ const updateUserProfile = async (req, res) => {
     return response(res, 200, "user profile update successfully", updateUser);
   } catch (error) {
     console.log(error);
+    console.error(error);
     return response(res, 500, "Internal server error", error.message);
   }
 };

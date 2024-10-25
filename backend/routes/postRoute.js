@@ -21,10 +21,10 @@ router.post(
   multerMiddleware.single("media"),
   createPost
 );
-router.delete("/posts/:postId", authMiddleware, deletePost);
+
 //get all posts
 router.get("/posts", authMiddleware, getAllPosts);
-
+router.delete("/posts/:postId", authMiddleware, deletePost);
 //get post by userid
 router.get("/posts/user/:userId", authMiddleware, getPostByUserId);
 

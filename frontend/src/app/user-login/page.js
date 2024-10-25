@@ -1,7 +1,6 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -14,8 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import * as Yup from "yup";
-
+import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -23,53 +21,73 @@ import { LogIn } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { loginUser, registerUser } from "@/service/auth.service";
 import toast from "react-hot-toast";
+
 const Page = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const registerSchema = Yup.object().shape({
-    username: Yup.string().required("Name is required"),
-    email: Yup.string().email("Invalid email").required("Email Required"),
-    password: Yup.string()
-      .min(6, "Password must be atleast 6 character")
-      .required("Password required"),
-    dateOfBirth: Yup.date().required("Birth Date is required"),
-    gender: Yup.string()
+
+  const registerSchema = yup.object().shape({
+    username: yup.string().required("Name is required"),
+    email: yup
+      .string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    password: yup
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .required("Password is required"),
+    dateOfBirth: yup.date().required("Birth date is required"),
+    gender: yup
+      .string()
       .oneOf(["male", "female", "other"], "please select a gender")
-      .required("Gender required"),
+      .required("Gender is required"),
   });
-  const loginSchema = Yup.object().shape({
-    email: Yup.string().email("Invalid email").required("Email Required"),
-    password: Yup.string()
-      .min(6, "Password must be atleast 6 character")
-      .required("Password required"),
+
+  const loginSchema = yup.object().shape({
+    email: yup
+      .string()
+      .email("Invalid email format")
+      .required("Email is required"),
+    password: yup
+      .string()
+      .min(6, "Password must be at least 6 characters")
+      .required("Password is required"),
   });
+
   const {
     register: registerLogin,
     handleSubmit: handleSubmitLogin,
     reset: resetLoginForm,
     formState: { errors: errorsLogin },
-  } = useForm({ resolver: yupResolver(loginSchema) });
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+  });
+
   const {
     register: registerSignUp,
     handleSubmit: handleSubmitSignUp,
     reset: resetSignUpForm,
     formState: { errors: errorsSignUp },
-  } = useForm({ resolver: yupResolver(registerSchema) });
+  } = useForm({
+    resolver: yupResolver(registerSchema),
+  });
+
   const onSubmitRegister = async (data) => {
     try {
       const result = await registerUser(data);
-      console.log(result);
       if (result.status === "success") {
         router.push("/");
       }
-      toast.success("User created successfully");
+      toast.success("User register successfully");
     } catch (error) {
       console.error(error);
-      toast.error("Email already exist");
+      toast.error("email already exist");
     } finally {
-      setIsLoading(!isLoading);
+      setIsLoading(false);
     }
   };
+
+  //reset the form
   useEffect(() => {
     resetLoginForm();
     resetSignUpForm();
@@ -78,21 +96,19 @@ const Page = () => {
   const onSubmitLogin = async (data) => {
     try {
       const result = await loginUser(data);
-      console.log(result);
       if (result.status === "success") {
         router.push("/");
       }
-      toast.success("User created successfully");
+      toast.success("User login successfully");
     } catch (error) {
       console.error(error);
-      toast.error("Invalid email or password");
+      toast.error("invalid email or password");
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleGoogleLogin = () => {
-    console.log("google login");
     window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google`;
   };
   return (

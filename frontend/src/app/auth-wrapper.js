@@ -13,7 +13,7 @@ export default function AuthWrapper({ children }) {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const isLoginPage = pathname === "/userLogin";
+  const isLoginPage = pathname === "/user-login";
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -42,7 +42,7 @@ export default function AuthWrapper({ children }) {
         console.log("logout failed please try again later", error);
       }
       if (!isLoginPage) {
-        router.push("/userLogin");
+        router.push("/user-login");
       }
     };
 

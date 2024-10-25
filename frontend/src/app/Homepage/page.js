@@ -60,7 +60,7 @@ const HomePage = () => {
         <LeftSideBar />
         <div className="flex-1 sm:px-2 sm:py-6 md:ml-64 lg:max-w-2xl 2xl:mx-auto overscroll-x-auto sm:max-w-[100vw]">
           <div className=" 2xl:ml-28">
-            <div className="overflow-x-auto max-w-[100vw] pl-1 dark:bg-[rgb(36,37,38)] my-1  mt-[8px] ">
+            <div className="overflow-x-auto max-w-[100vw] pl-1 dark:bg-[rgb(36,37,38)] my-1 sm:rounded-lg   mt-[8px] ">
               <StorySection />
             </div>
             <NewPostForm

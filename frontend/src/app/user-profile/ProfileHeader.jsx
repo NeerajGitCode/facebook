@@ -149,7 +149,7 @@ const ProfileHeader = ({
           <div className="mt-4 mdLmt-0 text-center md:text-left flex-grow">
             <h1 className="text-3xl font-bold">{profileData?.username}</h1>
             <p className="text-gray-400 font-semibold">
-              {profileData?.followerCount} followers
+              {profileData?.followerCount} friends
             </p>
           </div>
           {isOwner && (

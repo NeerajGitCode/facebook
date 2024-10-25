@@ -89,7 +89,7 @@ const LeftSideBar = () => {
           <Button
             variant="ghost"
             className="full justify-start"
-            onClick={() => handleNavigation("/friends")}>
+            onClick={() => handleNavigation("/friends-list")}>
             <Users className="mr-4" />
             Friends
           </Button>

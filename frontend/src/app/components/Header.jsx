@@ -200,7 +200,7 @@ const Header = () => {
           {[
             { icon: Home, path: "/", name: "home" },
             { icon: Video, path: "/videos", name: "video" },
-            { icon: Users, path: "/friends", name: "friends" },
+            { icon: Users, path: "/friends-list", name: "friends" },
           ].map(({ icon: Icon, path, name }) => (
             <Button
               key={name}

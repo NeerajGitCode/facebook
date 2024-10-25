@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import MutualFriends from "./profileContent/MutualFriend";
+import MutualFriends from "./profileContent/MutualFriends";
 import EditBio from "./profileContent/EditBio";
 import { usePostStore } from "@/store/usePostStore";
 import { formatDateInDDMMYYY } from "@/lib/utils";

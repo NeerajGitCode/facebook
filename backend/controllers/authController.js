@@ -1,6 +1,6 @@
 const User = require("../model/User");
-const { generateTokens } = require("../utils/generateTokens");
-const response = require("../utils/responseHandler");
+const { generateToken } = require("../utils/generateToken");
+const response = require("../utils/responceHandler");
 const bcrypt = require("bcryptjs");
 
 const registerUser = async (req, res) => {
@@ -24,7 +24,7 @@ const registerUser = async (req, res) => {
 
     await newUser.save();
 
-    const accessToken = generateTokens(newUser);
+    const accessToken = generateToken(newUser);
 
     res.cookie("auth_token", accessToken, {
       httpOnly: true,
@@ -57,7 +57,7 @@ const loginUser = async (req, res) => {
       return response(res, 404, "Invalid Password");
     }
 
-    const accessToken = generateTokens(user);
+    const accessToken = generateToken(user);
 
     res.cookie("auth_token", accessToken, {
       httpOnly: true,

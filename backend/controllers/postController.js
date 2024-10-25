@@ -1,7 +1,7 @@
 const { uploadFileToCloudinary } = require("../config/cloudinary");
 const Post = require("../model/Post");
-const Story = require("../model/Story");
-const response = require("../utils/responseHandler");
+const Story = require("../model/story");
+const response = require("../utils/responceHandler");
 
 const createPost = async (req, res) => {
   try {
@@ -36,8 +36,7 @@ const createPost = async (req, res) => {
     return response(res, 500, "Internal server error", error.message);
   }
 };
-// Delete post by postId
-// Delete post by postId
+//delete a post by post id
 const deletePost = async (req, res) => {
   const { postId } = req.params;
   const userId = req.user.userId; // Assuming user authentication middleware is used
@@ -236,7 +235,6 @@ const sharePost = async (req, res) => {
 
 module.exports = {
   createPost,
-  deletePost,
   getAllPosts,
   getPostByUserId,
   likePost,
@@ -244,4 +242,5 @@ module.exports = {
   sharePost,
   createStory,
   getAllStory,
+  deletePost,
 };
