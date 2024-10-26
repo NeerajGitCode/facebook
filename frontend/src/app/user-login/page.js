@@ -21,10 +21,11 @@ import { LogIn } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { loginUser, registerUser } from "@/service/auth.service";
 import toast from "react-hot-toast";
-import userStore from "@/store/userStore";
+
 const Page = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   const registerSchema = yup.object().shape({
     username: yup.string().required("Name is required"),
     email: yup
@@ -38,7 +39,7 @@ const Page = () => {
     dateOfBirth: yup.date().required("Birth date is required"),
     gender: yup
       .string()
-      .oneOf(["male", "female", "other"], "Please select a gender")
+      .oneOf(["male", "female", "other"], "please select a gender")
       .required("Gender is required"),
   });
 
@@ -58,55 +59,50 @@ const Page = () => {
     handleSubmit: handleSubmitLogin,
     reset: resetLoginForm,
     formState: { errors: errorsLogin },
-  } = useForm({ resolver: yupResolver(loginSchema) });
+  } = useForm({
+    resolver: yupResolver(loginSchema),
+  });
 
   const {
     register: registerSignUp,
     handleSubmit: handleSubmitSignUp,
     reset: resetSignUpForm,
     formState: { errors: errorsSignUp },
-  } = useForm({ resolver: yupResolver(registerSchema) });
+  } = useForm({
+    resolver: yupResolver(registerSchema),
+  });
 
   const onSubmitRegister = async (data) => {
-    setIsLoading(true);
     try {
       const result = await registerUser(data);
-      if (result.status === "success") {
-        localStorage.setItem("auth_token", result?.data?.token); // Store the token
-        userStore.getState().setUser(result?.data?.user);
-        toast.success("User registered successfully");
+      if (result && result.status === "success") {
         router.push("/");
-      } else {
-        toast.error("Email already exists");
       }
+      toast.success("User register successfully");
     } catch (error) {
       console.error(error);
-      toast.error("Error during registration");
+      toast.error("email already exist");
     } finally {
       setIsLoading(false);
     }
   };
 
+  //reset the form
+  useEffect(() => {
+    resetLoginForm();
+    resetSignUpForm();
+  }, [resetLoginForm, resetSignUpForm]);
+
   const onSubmitLogin = async (data) => {
-    setIsLoading(true);
     try {
       const result = await loginUser(data);
-      console.log(result);
-      console.log(result?.status);
-      console.log(result?.data);
-      console.log(result?.data?.data);
-      console.log(result?.data?.data?.user);
-      if (result.status === "success") {
-        localStorage.setItem("auth_token", result?.data?.token); // Store the token
-        userStore.getState().setUser(result?.data?.user);
-        toast.success("User logged in successfully");
+      if (result && result.status === "success") {
         router.push("/");
-      } else {
-        toast.error("Invalid email or password");
       }
+      toast.success("User login successfully");
     } catch (error) {
       console.error(error);
-      toast.error("Error during login");
+      toast.error("invalid email or password");
     } finally {
       setIsLoading(false);
     }
@@ -114,13 +110,8 @@ const Page = () => {
 
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google`;
+    console.log("google login", NEXT_PUBLIC_BACKEND_URL);
   };
-
-  useEffect(() => {
-    resetLoginForm();
-    resetSignUpForm();
-  }, [resetLoginForm, resetSignUpForm]);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center p1`">
       <motion.div
@@ -153,10 +144,10 @@ const Page = () => {
                       <Input
                         id="loginEmail"
                         name="email"
-                        className="col-span-3 dark:border-gray-400"
                         type="email"
                         {...registerLogin("email")}
-                        placeholder="Enter Your Email"
+                        placeholder="Enter your email"
+                        className="col-span-3 dark:border-gray-400"
                       />
                       {errorsLogin.email && (
                         <p className="text-red-500">
@@ -171,10 +162,10 @@ const Page = () => {
                       <Input
                         id="loginPassword"
                         name="password"
-                        className="col-span-3 dark:border-gray-400"
                         type="password"
                         {...registerLogin("password")}
-                        placeholder="Enter Your password"
+                        placeholder="Enter your Password"
+                        className="col-span-3 dark:border-gray-400"
                       />
                       {errorsLogin.password && (
                         <p className="text-red-500">
@@ -197,12 +188,12 @@ const Page = () => {
                         Username
                       </Label>
                       <Input
-                        id="signUpName"
+                        id="signupName"
                         name="username"
-                        className="col-span-3 dark:border-gray-400"
                         type="text"
                         {...registerSignUp("username")}
-                        placeholder="Enter Your username"
+                        placeholder="Enter your username"
+                        className="col-span-3 dark:border-gray-400"
                       />
                       {errorsSignUp.username && (
                         <p className="text-red-500">
@@ -215,12 +206,12 @@ const Page = () => {
                         Email
                       </Label>
                       <Input
-                        id="signUpEmail"
+                        id="signupEmail"
                         name="email"
-                        className="col-span-3 dark:border-gray-400"
                         type="email"
                         {...registerSignUp("email")}
-                        placeholder="Enter Your Email"
+                        placeholder="Enter your email"
+                        className="col-span-3 dark:border-gray-400"
                       />
                       {errorsSignUp.email && (
                         <p className="text-red-500">
@@ -233,12 +224,12 @@ const Page = () => {
                         Password
                       </Label>
                       <Input
-                        id="signUpPassword"
+                        id="signPassword"
                         name="password"
-                        className="col-span-3 dark:border-gray-400"
                         type="password"
                         {...registerSignUp("password")}
-                        placeholder="Enter Your password"
+                        placeholder="Enter your Password"
+                        className="col-span-3 dark:border-gray-400"
                       />
                       {errorsSignUp.password && (
                         <p className="text-red-500">
@@ -251,12 +242,12 @@ const Page = () => {
                         Date of birth
                       </Label>
                       <Input
-                        id="signUpBirthDate"
+                        id="signupBirthday"
                         name="dateOfBirth"
-                        className="col-span-3 dark:border-gray-400"
                         type="date"
                         {...registerSignUp("dateOfBirth")}
-                        placeholder="Enter Your password"
+                        placeholder="Enter your Password"
+                        className="col-span-3 dark:border-gray-400"
                       />
                       {errorsSignUp.dateOfBirth && (
                         <p className="text-red-500">
@@ -264,47 +255,34 @@ const Page = () => {
                         </p>
                       )}
                     </div>
-                    <div className="space-y-4">
-                      <Label className="text-right">Gender</Label>
+                    <div className="space-y-2">
+                      <Label>Gender</Label>
                       <RadioGroup
-                        className="flex justify-between"
+                        className="flex justify-between "
                         defaultValue="male"
                         {...registerSignUp("gender")}>
                         <div className="flex items-center space-x-2">
-                          <RadioGroupItem
-                            htmlFor="male"
-                            value="male"
-                            id="male"
-                          />
-                          <Label>male</Label>
+                          <RadioGroupItem value="male" id="male" />
+                          <Label htmlFor="male">Male</Label>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <RadioGroupItem
-                            htmlFor="female"
-                            value="female"
-                            id="female"
-                          />
-                          <Label>female</Label>
+                          <RadioGroupItem value="female" id="female" />
+                          <Label htmlFor="female">Female</Label>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <RadioGroupItem
-                            htmlFor="other"
-                            value="other"
-                            id="other"
-                          />
-                          <Label>other</Label>
+                          <RadioGroupItem value="other" id="other" />
+                          <Label htmlFor="other">Other</Label>
                         </div>
                       </RadioGroup>
-
                       {errorsSignUp.gender && (
                         <p className="text-red-500">
                           {errorsSignUp.gender.message}
                         </p>
                       )}
                     </div>
-                    <Button className="w-full  bg-blue-700" type="submit">
-                      <signIn />
-                      Sign Up
+
+                    <Button className="w-full" type="submit">
+                      <LogIn className="mr-2 w-4 h-4" /> Sign Up
                     </Button>
                   </div>
                 </form>

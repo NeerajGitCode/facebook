@@ -58,14 +58,12 @@ const loginUser = async (req, res) => {
     }
 
     const accessToken = generateToken(user);
-
+    console.log(accessToken);
     res.cookie("auth_token", accessToken, {
       httpOnly: true,
       sameSite: "none",
       secure: true,
     });
-    console.log("accessToken", accessToken);
-    console.log("accessToken");
     return response(res, 201, "User logged in successfully", {
       username: user.username,
       email: user.email,
