@@ -25,7 +25,6 @@ import userStore from "@/store/userStore";
 const Page = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { userStore } = userStore();
   const registerSchema = yup.object().shape({
     username: yup.string().required("Name is required"),
     email: yup
@@ -73,6 +72,8 @@ const Page = () => {
     try {
       const result = await registerUser(data);
       if (result.status === "success") {
+        localStorage.setItem("auth_token", result?.data?.token); // Store the token
+        userStore.getState().setUser(result?.data?.user);
         toast.success("User registered successfully");
         router.push("/");
       } else {
