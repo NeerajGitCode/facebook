@@ -64,10 +64,12 @@ const loginUser = async (req, res) => {
       sameSite: "none",
       secure: true,
     });
-
+    console.log("accessToken", accessToken);
+    console.log("accessToken");
     return response(res, 201, "User logged in successfully", {
       username: user.username,
       email: user.email,
+      token: accessToken,
     });
   } catch (error) {
     console.error(error);

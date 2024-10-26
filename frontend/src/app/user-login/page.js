@@ -21,11 +21,11 @@ import { LogIn } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { loginUser, registerUser } from "@/service/auth.service";
 import toast from "react-hot-toast";
-
+import userStore from "@/store/userStore";
 const Page = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
+  const { userStore } = userStore();
   const registerSchema = yup.object().shape({
     username: yup.string().required("Name is required"),
     email: yup
@@ -90,7 +90,14 @@ const Page = () => {
     setIsLoading(true);
     try {
       const result = await loginUser(data);
+      console.log(result);
+      console.log(result?.status);
+      console.log(result?.data);
+      console.log(result?.data?.data);
+      console.log(result?.data?.data?.user);
       if (result.status === "success") {
+        localStorage.setItem("auth_token", result?.data?.token); // Store the token
+        userStore.getState().setUser(result?.data?.user);
         toast.success("User logged in successfully");
         router.push("/");
       } else {

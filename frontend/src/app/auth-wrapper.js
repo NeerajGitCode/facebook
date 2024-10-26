@@ -15,6 +15,19 @@ export default function AuthWrapper({ children }) {
 
   const isLoginPage = pathname === "/user-login";
 
+  const handleLogout = async () => {
+    clearUser();
+    setIsAuthenticated(false);
+    try {
+      await logout();
+    } catch (error) {
+      console.log("Logout failed, please try again later", error);
+    }
+    if (!isLoginPage) {
+      router.push("/user-login");
+    }
+  };
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -26,23 +39,10 @@ export default function AuthWrapper({ children }) {
           await handleLogout();
         }
       } catch (error) {
-        console.error("authenticated failed", error);
+        console.error("Authentication failed", error);
         await handleLogout();
       } finally {
         setLoading(false);
-      }
-    };
-
-    const handleLogout = async () => {
-      clearUser();
-      setIsAuthenticated(false);
-      try {
-        await logout();
-      } catch (error) {
-        console.log("logout failed please try again later", error);
-      }
-      if (!isLoginPage) {
-        router.push("/user-login");
       }
     };
 

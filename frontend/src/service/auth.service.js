@@ -16,6 +16,7 @@ export const loginUser = async (userData) => {
     const response = await axiosInstance.post("/auth/login", userData);
     return response.data;
   } catch (error) {
+    console.log("reached to 1");
     console.log(error);
   }
 };
@@ -35,6 +36,7 @@ export const checkUserAuth = async () => {
   try {
     const response = await axiosInstance.get("/users/check-auth"); // Add a leading slash
     if (response.data.status === "success") {
+      console.log("reached to succes cheack auth");
       return { isAuthenticated: true, user: response?.data?.data };
     } else {
       return { isAuthenticated: false };
