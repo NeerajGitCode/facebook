@@ -24,7 +24,7 @@ import toast from "react-hot-toast";
 
 const Page = () => {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const registerSchema = yup.object().shape({
     username: yup.string().required("Name is required"),
@@ -39,7 +39,7 @@ const Page = () => {
     dateOfBirth: yup.date().required("Birth date is required"),
     gender: yup
       .string()
-      .oneOf(["male", "female", "other"], "please select a gender")
+      .oneOf(["male", "female", "other"], "Please select a gender")
       .required("Gender is required"),
   });
 
@@ -59,50 +59,46 @@ const Page = () => {
     handleSubmit: handleSubmitLogin,
     reset: resetLoginForm,
     formState: { errors: errorsLogin },
-  } = useForm({
-    resolver: yupResolver(loginSchema),
-  });
+  } = useForm({ resolver: yupResolver(loginSchema) });
 
   const {
     register: registerSignUp,
     handleSubmit: handleSubmitSignUp,
     reset: resetSignUpForm,
     formState: { errors: errorsSignUp },
-  } = useForm({
-    resolver: yupResolver(registerSchema),
-  });
+  } = useForm({ resolver: yupResolver(registerSchema) });
 
   const onSubmitRegister = async (data) => {
+    setIsLoading(true);
     try {
       const result = await registerUser(data);
       if (result.status === "success") {
+        toast.success("User registered successfully");
         router.push("/");
+      } else {
+        toast.error("Email already exists");
       }
-      toast.success("User register successfully");
     } catch (error) {
       console.error(error);
-      toast.error("email already exist");
+      toast.error("Error during registration");
     } finally {
       setIsLoading(false);
     }
   };
 
-  //reset the form
-  useEffect(() => {
-    resetLoginForm();
-    resetSignUpForm();
-  }, [resetLoginForm, resetSignUpForm]);
-
   const onSubmitLogin = async (data) => {
+    setIsLoading(true);
     try {
       const result = await loginUser(data);
       if (result.status === "success") {
+        toast.success("User logged in successfully");
         router.push("/");
+      } else {
+        toast.error("Invalid email or password");
       }
-      toast.success("User login successfully");
     } catch (error) {
       console.error(error);
-      toast.error("invalid email or password");
+      toast.error("Error during login");
     } finally {
       setIsLoading(false);
     }
@@ -111,6 +107,12 @@ const Page = () => {
   const handleGoogleLogin = () => {
     window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/google`;
   };
+
+  useEffect(() => {
+    resetLoginForm();
+    resetSignUpForm();
+  }, [resetLoginForm, resetSignUpForm]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-400 to-purple-400 flex items-center justify-center p1`">
       <motion.div

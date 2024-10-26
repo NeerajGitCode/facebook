@@ -33,10 +33,10 @@ export const logout = async () => {
 //check auth api
 export const checkUserAuth = async () => {
   try {
-    const response = await axiosInstance.get("users/check-auth");
+    const response = await axiosInstance.get("/users/check-auth"); // Add a leading slash
     if (response.data.status === "success") {
       return { isAuthenticated: true, user: response?.data?.data };
-    } else if (response.status === "error") {
+    } else {
       return { isAuthenticated: false };
     }
   } catch (error) {
